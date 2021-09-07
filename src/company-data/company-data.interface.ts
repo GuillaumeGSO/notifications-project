@@ -1,21 +1,23 @@
+//TODO add typegoose that allows decorators for types
+
 export interface Company {
     companyId: string
     companyName: string;
     users: User[];
-    subscribedNotificationTypes: NotificationTypeEnum[]
+    subscribedChannels: ChannelEnum[]
 }
 
 export interface User {
     userId: string;
     lastName: string;
     firstName: string;
-    subscribedNotificationTypes: NotificationTypeEnum[]
+    email: string;
+    subscribedChannels: ChannelEnum[]
 }
 
-export enum NotificationTypeEnum {
-    LEAVE_BALANCE = "leave_balance_reminder",
-    PAYSLIP = "monthly_payslip",
-    BIRTHDAY = "happy_birthday",
+export enum ChannelEnum {
+    EMAIL,
+    UI,
 }
 
 

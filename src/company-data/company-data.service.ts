@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { User, Company, NotificationTypeEnum } from './company-data.interface';
+import { User, Company, ChannelEnum } from './company-data.interface';
 
 @Injectable()
 export class CompanyDataService {
 
-    find_all_notification_type(): NotificationTypeEnum[] {
-        return [NotificationTypeEnum.BIRTHDAY, NotificationTypeEnum.LEAVE_BALANCE, NotificationTypeEnum.PAYSLIP]
+    find_all_channels(): string[] {
+        return Object.keys(ChannelEnum)
     }
 
     get_company_by_id(companyId: string): Company {
@@ -16,38 +16,38 @@ export class CompanyDataService {
                 userId: companyId + "01",
                 lastName: "LASTNAME01",
                 firstName: "first name01",
-                subscribedNotificationTypes: [NotificationTypeEnum.BIRTHDAY]
+                email: "usr01@test.te",
+                subscribedChannels: [ChannelEnum.EMAIL]
             }, {
                 userId: companyId + "02",
                 lastName: "LASTNAME02",
                 firstName: "first name02",
-                subscribedNotificationTypes: [NotificationTypeEnum.LEAVE_BALANCE]
+                email: "usr02@test.te",
+                subscribedChannels: [ChannelEnum.UI]
             }, {
                 userId: companyId + "03",
                 lastName: "LASTNAME03",
                 firstName: "first name03",
-                subscribedNotificationTypes: [NotificationTypeEnum.PAYSLIP]
+                email: "usr03@test.te",
+                subscribedChannels: [ChannelEnum.EMAIL, ChannelEnum.UI]
             }, {
                 userId: companyId + "04",
                 lastName: "LASTNAME04",
                 firstName: "first name04",
-                subscribedNotificationTypes: [NotificationTypeEnum.BIRTHDAY, NotificationTypeEnum.LEAVE_BALANCE, NotificationTypeEnum.PAYSLIP]
-            }, {
-                userId: companyId + "05",
-                lastName: "LASTNAME05",
-                firstName: "first name05",
-                subscribedNotificationTypes: [NotificationTypeEnum.BIRTHDAY, NotificationTypeEnum.LEAVE_BALANCE]
-            }],
-            subscribedNotificationTypes: [NotificationTypeEnum.PAYSLIP]
+                email: "usr04@test.te",
+                subscribedChannels: []
+            },],
+            subscribedChannels: [ChannelEnum.EMAIL]
         }
     }
 
-    get_user_by_id(userId): User {
+    get_user_by_id(userId: string): User {
         return {
             userId: userId,
             lastName: "LASTNAME",
             firstName: "first name",
-            subscribedNotificationTypes: [NotificationTypeEnum.BIRTHDAY, NotificationTypeEnum.LEAVE_BALANCE]
+            email: "lastname@test.te",
+            subscribedChannels: [ChannelEnum.EMAIL, ChannelEnum.UI]
         }
     }
 
