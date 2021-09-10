@@ -1,5 +1,3 @@
-//TODO add typegoose that allows decorators for types
-
 export interface Company {
     companyId: string
     companyName: string;

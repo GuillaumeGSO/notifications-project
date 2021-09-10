@@ -3,14 +3,14 @@ import { CompanyDataService } from 'src/company-data/company-data.service';
 import { NotificationTypeEnum, UINotification } from './interfaces/notification.interface';
 import { CreateNotificationDto } from './dto/create-notification.dto'
 import { SenderService, UINotificationStrategy } from './services/sender.service';
-import { NotificationDataService } from 'src/notification-data/notification-data.service'
+import { NotificationDataService } from 'src/notifications/services/notifications-data.service'
 @Injectable()
 export class NotificationService {
     constructor(private readonly companyDataService: CompanyDataService,
         private readonly notificationDataService: NotificationDataService) { }
 
     get_notifications_for_user(userId: string): UINotification[] {
-        return this.notificationDataService.get_notifications_for_user(userId);
+        return this.notificationDataService.get_notifications_for_user_old(userId);
     }
 
     send_notification(notif: CreateNotificationDto): string {

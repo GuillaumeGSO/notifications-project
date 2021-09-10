@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User, Company, ChannelEnum } from './company-data.interface';
-
+/**
+ * Mocked Company data service
+ */
 @Injectable()
 export class CompanyDataService {
 

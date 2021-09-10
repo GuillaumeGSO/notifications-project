@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
+import { TypegooseModule } from 'nestjs-typegoose';
 import { CompanyDataModule } from 'src/company-data/company-data.module';
 import { CompanyDataService } from 'src/company-data/company-data.service';
-import { NotificationDataModule } from 'src/notification-data/notification-data.module';
-import { NotificationDataService } from 'src/notification-data/notification-data.service';
+import { NotificationDataService } from 'src/notifications/services/notifications-data.service';
 import { NotificationsController } from './notifications.controller';
+import { NotificationData } from './services/notifications-data.model';
 import { NotificationService } from './notifications.service';
 
 @Module({
-  imports: [CompanyDataModule, NotificationDataModule],
+  imports: [CompanyDataModule, TypegooseModule.forFeature([NotificationData])],
   controllers: [NotificationsController],
-  providers: [NotificationService, CompanyDataService, NotificationDataService],
+  providers: [CompanyDataService, NotificationDataService, NotificationService],
 })
 export class NotificationsModule {}
