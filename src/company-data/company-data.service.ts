@@ -10,6 +10,7 @@ export class CompanyDataService {
         return Object.keys(ChannelEnum)
     }
 
+    //TODO : a factory ?
     get_company_by_id(companyId: string): Company {
         return {
             companyId: companyId,
