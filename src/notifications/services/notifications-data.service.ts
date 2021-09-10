@@ -9,14 +9,17 @@ export class NotificationDataService {
     constructor(
         @InjectModel(NotificationData)
         private readonly notificationDataModel: ReturnModelType<typeof NotificationData>
-    ) { }
+    ) {}
 
     async get_notifications_for_user(userId: string): Promise<NotificationData[]> {
-        return await this.notificationDataModel.find().exec();
+        const notifs = await this.notificationDataModel.find({ userId: userId }).exec();
+        return notifs
     }
 
-    get_notifications_for_user_old(userId: string): any[] {
-        return [{ userId: 'userId1', content: 'notif1' }, { userId: 'userId2', content: "notif3" }, { userId: 'userId3', content: "notif3" }]
+    async create_ui_notification(userId : string, typeNotif: string, content: string): Promise<NotificationData> {
+        const newnot = new this.notificationDataModel({userId: userId, type: typeNotif, content: content})
+        await newnot.save();
+        return newnot
     }
 
 }

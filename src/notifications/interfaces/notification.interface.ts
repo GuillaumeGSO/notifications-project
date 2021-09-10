@@ -1,14 +1,15 @@
 import { Company, User } from "src/company-data/company-data.interface";
 
-abstract class Notification {
+interface Notification {
+    type: string;
     content: string;
 }
 
-export class UINotification extends Notification {
-    user: User;
+export interface UINotification extends Notification {
+    userId: string;
 }
 
-export class EmailNotification extends Notification {
+export interface EmailNotification extends Notification {
     company: Company;
     user: User;
 }
