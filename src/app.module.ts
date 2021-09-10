@@ -14,7 +14,7 @@ import { NotificationData } from './notifications/services/notifications-data.mo
 @Module({
   imports: [
     TypegooseModule.forRoot(config.mongoURI), CompanyDataModule, NotificationsModule],
-  controllers: [AppController, NotificationsController],
-  providers: [AppService, CompanyDataService, NotificationService, NotificationDataService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
