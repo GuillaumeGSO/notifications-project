@@ -1,120 +1,141 @@
-import { Injectable } from "@nestjs/common";
-import { UriVersioningOptions } from "@nestjs/common/interfaces";
-import { ChannelEnum, Company, User } from "src/company-data/company-data.interface";
-import { NotificationDataService } from "./notifications-data.service";
-
-abstract class contentProvider {
-    //TODO
-}
+import { Injectable } from '@nestjs/common';
+import { UriVersioningOptions } from '@nestjs/common/interfaces';
+import { start } from 'repl';
+import {
+  ChannelEnum,
+  Company,
+  User,
+} from 'src/company-data/company-data.interface';
+import { NotificationDataService } from './notifications-data.service';
 
 abstract class EventProcessor {
-    abstract run_event(company: Company, user: User): void;
-    abstract create_content(): string;
+  abstract run_event(company: Company, user: User): void;
 }
 
 export class PayReadyEventProcessor extends EventProcessor {
+  run_event(company: Company, user: User) {
+    const strategy: INotificationStrategy = new EmailNotificationStrategy();
+    strategy.content = this.generate_content(company, user);
+    const sender = new SenderService(strategy);
+    sender.send_notification(company, user);
+  }
 
-    run_event(company: Company, user: User) {
-        const sender = new SenderService(new EmailNotificationStrategy())
-        sender.send_notification(null, null, null)
-    }
-
-    create_content() {
-        return "content for email pay ready"
-    }
+  private generate_content(company: Company, user: User): EmailContent {
+    return {
+      address: user.email,
+      object: 'Payslip is ready',
+      body: `Dear ${user.lastName}, your monthly payslip has been procedeed by ${company.companyName}`,
+    } as EmailContent;
+  }
 }
 
 /**
- * Process the End of the year event by send a UI notification to the user about his balance leave 
+ * Process the End of the year event by send a UI notification to the user about his balance leave
  */
 export class EndOfYearEventProcessor extends EventProcessor {
-    run_event(company: Company, user: User) {
-        const sender = new SenderService(new UINotificationStrategy(null))
-        sender.send_notification(company, user, "end of the year")
-    }
-    create_content() {
-        return "content for leave reminder"
-    }
+  run_event(company: Company, user: User) {
+    const strategy: INotificationStrategy = new UINotificationStrategy(null);
+    strategy.content = this.generate_ui_content();
+
+    const sender = new SenderService(strategy);
+    return sender.send_notification(company, user);
+  }
+
+  private generate_ui_content(): Content {
+    return {
+      content: 'Please check your leave balance before end of the year',
+    };
+  }
 }
 
 export class BirthdayEventProcessor extends EventProcessor {
+  run_event(company: Company, user: User) {
+    this.send_email(company, user);
+    this.send_ui_notification(user);
+  }
 
-    run_event(company: Company, user: User) {
-        var strategy = new EmailNotificationStrategy();
-        strategy.content = { address: user.email, object: "Happy birthday !", body: `Dear ${user.firstName}, ${company.companyName} is wishing you an happy birthay` } as EmailContent
-        var sender = new SenderService(new EmailNotificationStrategy())
-        sender.send_notification(company, user, "birthday")
-        sender = new SenderService(new UINotificationStrategy(null))
-    }
-    create_content() {
-        return "content for leave reminder happy birthay"
-        //FIXME : the content must be different between email and UI
-    }
+  private send_email(company: Company, user: User) {
+    const strategy = new EmailNotificationStrategy();
+    strategy.content = this.generate_email_content(company, user);
+    const sender = new SenderService(strategy);
+    sender.send_notification(company, user);
+  }
 
+  private generate_email_content(company: Company, user: User): EmailContent {
+    //FIXME : content shouldn't mandatory
+    return {
+      address: user.email,
+      object: 'Happy birthday !',
+      body: `Dear ${user.firstName}, ${company.companyName} is wishing you an happy birthay`,
+    } as EmailContent;
+  }
+
+  private send_ui_notification(user: User) {
+    const strategy: INotificationStrategy = new UINotificationStrategy(null);
+    strategy.content = {
+      content: `Happy birthday ${user.firstName} !`,
+    } as Content;
+    const sender = new SenderService(strategy);
+  }
 }
 
 export interface INotificationStrategy {
-    send(company: Company, user: User): void;
-    //Each strategy can choose what to do for its content
-    create_content(company: Company, user: User): Content;
+  content: Content;
+  send(company: Company, user: User): void;
 }
 
-
 export class UINotificationStrategy implements INotificationStrategy {
+  constructor(
+    private readonly notificationDataService: NotificationDataService,
+  ) {}
 
-    constructor(private readonly notificationDataService: NotificationDataService) { }
+  content: Content;
 
-    send(company: Company, user: User) {
-        //Do your stuff
-        //Is this the place to check if registred ? 
-        //Nope : do it database side
-        if (ChannelEnum.UI in user.subscribedChannels) {
-            console.log(`sending a new notification from ${company.companyName} to ${user.userId}`)
-            this.notificationDataService.create_ui_notification(user.userId, "eventype", 'content')
-        }
+  send(company: Company, user: User) {
+    //Do your stuff
+    //Is this the place to check if registred ?
+    //Nope : do it database side
+    if (ChannelEnum.UI in user.subscribedChannels) {
+      console.log(
+        `sending a new notification from ${company.companyName} to ${user.userId}`,
+      );
+      this.notificationDataService.create_ui_notification(
+        user.userId,
+        'eventype',
+        'content',
+      );
     }
-
-    create_content(company: Company, user: User) {
-        return { content: "my content" }
-    }
+  }
 }
 
 interface Content {
-    content: string;
+  content: string;
 }
 
 interface EmailContent extends Content {
-    address: string;
-    object: string;
-    body: string;
+  address: string;
+  object: string;
+  body: string;
 }
 
 export class EmailNotificationStrategy implements INotificationStrategy {
+  content: EmailContent;
 
-    content: EmailContent
-
-    send(company: Company, user: User) {
-        console.log(`sending a new email from ${company.companyName} to ${user.userId}`)
-    }
-
-    create_content(company: Company, user: User) {
-        return { address: user.email, object: "title", body: "my body content" } as EmailContent
-    }
-
+  send(company: Company, user: User) {
+    console.log(
+      `sending a new email from ${company.companyName} to ${user.userId}`,
+    );
+  }
 }
 
 @Injectable()
 export class SenderService {
-    constructor(private readonly strategy: INotificationStrategy) {
-        this.strategy = strategy
-    }
+  constructor(private readonly strategy: INotificationStrategy) {
+    this.strategy = strategy;
+  }
 
-    send_notification(company: Company, user: User, notificationType: string) {
-        const content = `Sending notification ${notificationType} from sender  ${user.firstName}`;
-        this.strategy.send(company, user);
-        return content
-    }
-
+  send_notification(company: Company, user: User) {
+    console.log(`Sending notification to ${user}`);
+    this.strategy.send(company, user);
+  }
 }
-
-

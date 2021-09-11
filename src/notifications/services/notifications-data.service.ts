@@ -5,21 +5,33 @@ import { NotificationData } from './notifications-data.model';
 
 @Injectable()
 export class NotificationDataService {
+  constructor(
+    @InjectModel(NotificationData)
+    private readonly notificationDataModel: ReturnModelType<
+      typeof NotificationData
+    >,
+  ) {}
 
-    constructor(
-        @InjectModel(NotificationData)
-        private readonly notificationDataModel: ReturnModelType<typeof NotificationData>
-    ) {}
+  async get_notifications_for_user(
+    userId: string,
+  ): Promise<NotificationData[]> {
+    const notifs = await this.notificationDataModel
+      .find({ userId: userId })
+      .exec();
+    return notifs;
+  }
 
-    async get_notifications_for_user(userId: string): Promise<NotificationData[]> {
-        const notifs = await this.notificationDataModel.find({ userId: userId }).exec();
-        return notifs
-    }
-
-    async create_ui_notification(userId : string, typeNotif: string, content: string): Promise<NotificationData> {
-        const newnot = new this.notificationDataModel({userId: userId, type: typeNotif, content: content})
-        await newnot.save();
-        return newnot
-    }
-
+  async create_ui_notification(
+    userId: string,
+    typeNotif: string,
+    content: string,
+  ): Promise<NotificationData> {
+    const newnot = new this.notificationDataModel({
+      userId: userId,
+      type: typeNotif,
+      content: content,
+    });
+    await newnot.save();
+    return newnot;
+  }
 }

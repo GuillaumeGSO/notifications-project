@@ -1,21 +1,21 @@
-import { Company, User } from "src/company-data/company-data.interface";
+import { Company, User } from 'src/company-data/company-data.interface';
 
 interface Notification {
-    type: string;
-    content: string;
+  type: string;
+  content: string;
 }
 
 export interface UINotification extends Notification {
-    userId: string;
+  userId: string;
 }
 
 export interface EmailNotification extends Notification {
-    company: Company;
-    user: User;
+  company: Company;
+  user: User;
 }
 
 export enum NotificationTypeEnum {
-    LEAVE_BALANCE = "leave_balance_reminder",
-    PAYSLIP = "monthly_payslip",
-    BIRTHDAY = "happy_birthday",
+  LEAVE_BALANCE = 'leave_balance_reminder',
+  PAYSLIP = 'monthly_payslip',
+  BIRTHDAY = 'happy_birthday',
 }

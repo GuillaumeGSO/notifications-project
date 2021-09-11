@@ -6,16 +6,19 @@ import { NotificationData } from './services/notifications-data.model';
 
 @Controller('notifications')
 export class NotificationsController {
-    constructor(
-        private readonly notificationService: NotificationService) { }
+  constructor(private readonly notificationService: NotificationService) {}
 
-    @Get(':id')
-    async get_user_ui_notifications(@Param('id') id): Promise<NotificationData[]> {
-        return await this.notificationService.get_notifications_for_user(id)
-    }
+  @Get(':id')
+  async get_user_ui_notifications(
+    @Param('id') id,
+  ): Promise<NotificationData[]> {
+    return await this.notificationService.get_notifications_for_user(id);
+  }
 
-    @Post()
-    send_notifications(@Body() createNotificationDto: CreateNotificationDto): string {
-        return this.notificationService.send_notification(createNotificationDto)
-    }
+  @Post()
+  send_notifications(
+    @Body() createNotificationDto: CreateNotificationDto,
+  ): string {
+    return this.notificationService.send_notification(createNotificationDto);
+  }
 }
