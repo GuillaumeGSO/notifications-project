@@ -25,18 +25,18 @@ export class NotificationService {
         //Pick the right strategy
         switch (type) {
             case "leave_balance_reminder": {
-                var myEvent = new EndOfYearEventProcessor();
-                myEvent.run_event();
+                const myLeaveEvent = new EndOfYearEventProcessor();
+                myLeaveEvent.run_event(company, user);
                 break;
         }
             case "monthly_payslip" : {
-                var myEvent= new PayReadyEventProcessor();
-                myEvent.run_event();
+                const myPayEvent= new PayReadyEventProcessor();
+                myPayEvent.run_event(company, user);
                 break;
             }
             case "happy_birthday" : {
-                var myEvent= new BirthdayEventProcessor();
-                myEvent.run_event();
+                const myBirthdayEvent = new BirthdayEventProcessor();
+                myBirthdayEvent.run_event(company, user);
                 break;
             }
         }
