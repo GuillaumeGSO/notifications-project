@@ -5,56 +5,75 @@ import { User, Company, ChannelEnum } from './company-data.interface';
  */
 @Injectable()
 export class CompanyDataService {
-  find_all_channels(): string[] {
-    return Object.keys(ChannelEnum);
+  users: User[] = [
+    //For MonsterINC company
+    this.generateUser("0", "Bob", "WARWOSKY", "bob@monster.inc", [ChannelEnum.EMAIL, ChannelEnum.UI]),
+    this.generateUser("1", "Fred", "WARWOSKY", "fred@monster.inc", [ChannelEnum.EMAIL]),
+    this.generateUser("2", "Tom", "WARWOSKY", "tom@monster.inc", [ChannelEnum.UI]),
+    this.generateUser("3", "John", "WARWOSKY", "john@monster.inc", []),
+
+    //For DALTON sarl company
+    this.generateUser("10", "Joe", "DALTON", "joe@dalton.com", [ChannelEnum.EMAIL, ChannelEnum.UI]),
+    this.generateUser("11", "Jack", "DALTON", "jack@dalton.com", [ChannelEnum.EMAIL]),
+    this.generateUser("12", "William", "DALTON", "william@dalton.com", [ChannelEnum.UI]),
+    this.generateUser("13", "Avrel", "DALTON", "avrel@dalton.com", []),
+
+    //For The Simpson's company
+    this.generateUser("20", "Bart", "SIMPSON", "bart@simpsons.com", [ChannelEnum.EMAIL, ChannelEnum.UI]),
+    this.generateUser("21", "Homer", "SIMPSON", "homer@simpsons.com", [ChannelEnum.EMAIL]),
+    this.generateUser("22", "Marge", "SIMPSON", "Marge@simpsons.com", [ChannelEnum.UI]),
+    this.generateUser("23", "Lisa", "SIMPSON", "lisa@simpsons.com", [])
+  ]
+  companies: Company[] = [
+    this.generateCompany("100", "EMPTY", [], [ChannelEnum.EMAIL, ChannelEnum.UI]),
+    this.generateCompany("200", "MONSTER Inc",
+      [
+        this.getUserById("0"),
+        this.getUserById("1"),
+        this.getUserById("2"),
+        this.getUserById("3")
+      ],
+      [ChannelEnum.EMAIL, ChannelEnum.UI]),
+    this.generateCompany("300", "DALTON Sarl", 
+    [
+      this.getUserById("10"),
+      this.getUserById("11"),
+      this.getUserById("12"),
+      this.getUserById("13")
+    ], 
+    [ChannelEnum.EMAIL]),
+    this.generateCompany("400", "THE SIMPSON'S", 
+    [
+      this.getUserById("20"),
+      this.getUserById("21"),
+      this.getUserById("22"),
+      this.getUserById("23")
+    ], [ChannelEnum.UI]),
+
+  ]
+
+  getCompanyById(companyId: string): Company {
+    return this.companies.find((cp) => (cp.companyId === companyId))
   }
 
-  //TODO : a factory ?
-  get_company_by_id(companyId: string): Company {
+  getUserById(userId: string): User {
+    return this.users.find((us) => (us.userId === userId))
+  }
+
+  generateCompany(companyId: string, companyName: string, users: User[], channels: ChannelEnum[]): Company {
     return {
       companyId: companyId,
-      companyName: 'CompanyName',
-      users: [
-        {
-          userId: companyId + '01',
-          lastName: 'LASTNAME01',
-          firstName: 'first name01',
-          email: 'usr01@test.te',
-          subscribedChannels: [ChannelEnum.EMAIL],
-        },
-        {
-          userId: companyId + '02',
-          lastName: 'LASTNAME02',
-          firstName: 'first name02',
-          email: 'usr02@test.te',
-          subscribedChannels: [ChannelEnum.UI],
-        },
-        {
-          userId: companyId + '03',
-          lastName: 'LASTNAME03',
-          firstName: 'first name03',
-          email: 'usr03@test.te',
-          subscribedChannels: [ChannelEnum.EMAIL, ChannelEnum.UI],
-        },
-        {
-          userId: companyId + '04',
-          lastName: 'LASTNAME04',
-          firstName: 'first name04',
-          email: 'usr04@test.te',
-          subscribedChannels: [],
-        },
-      ],
-      subscribedChannels: [ChannelEnum.EMAIL],
-    };
+      companyName: companyName,
+      users: users, subscribedChannels: channels
+    } as Company
   }
-
-  get_user_by_id(userId: string): User {
+  generateUser(userId: string, firstName: string, lastName: string, email: string, channelEnums: ChannelEnum[]): User {
     return {
       userId: userId,
-      lastName: 'LASTNAME',
-      firstName: 'first name',
-      email: 'lastname@test.te',
-      subscribedChannels: [ChannelEnum.EMAIL, ChannelEnum.UI],
-    };
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      subscribedChannels: channelEnums
+    } as User
   }
 }

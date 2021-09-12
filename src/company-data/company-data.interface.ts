@@ -1,3 +1,8 @@
+/**
+ * Those interfaces represent what the "Entreprise DB" would be
+ */
+
+
 export interface Company {
   companyId: string;
   companyName: string;
