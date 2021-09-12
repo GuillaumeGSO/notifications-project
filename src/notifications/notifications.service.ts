@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CompanyDataService } from 'src/company-data/company-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import {
-  SenderService,
-  UINotificationStrategy,
   PayReadyEventProcessor,
   EndOfYearEventProcessor,
   BirthdayEventProcessor,
@@ -33,23 +31,30 @@ export class NotificationService {
     const company = this.companyDataService.get_company_by_id(notif.companyId);
     const user = this.companyDataService.get_user_by_id(notif.userId);
     const type = notif.notificationType;
-    var result: string;
+    let result: string;
     //Pick the right processor
     switch (type) {
-      case 'leave_balance_reminder': {
-        const myLeaveEvent = new EndOfYearEventProcessor();
-        myLeaveEvent.run_event(company, user);
+      case 'leave-balance-reminder': {
+        const myLeaveEvent = new EndOfYearEventProcessor(
+          this.notificationDataService,
+        );
+        result = myLeaveEvent.run_event(company, user);
         break;
       }
-      case 'monthly_payslip': {
+      case 'monthly-payslip': {
         const myPayEvent = new PayReadyEventProcessor();
-        myPayEvent.run_event(company, user);
+        result = myPayEvent.run_event(company, user);
         break;
       }
-      case 'happy_birthday': {
-        const myBirthdayEvent = new BirthdayEventProcessor();
-        myBirthdayEvent.run_event(company, user);
+      case 'happy-birthday': {
+        const myBirthdayEvent = new BirthdayEventProcessor(
+          this.notificationDataService,
+        );
+        result = myBirthdayEvent.run_event(company, user);
         break;
+      }
+      default: {
+        result = 'Notification type not known';
       }
     }
     return result;

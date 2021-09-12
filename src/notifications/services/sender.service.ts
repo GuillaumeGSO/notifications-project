@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UriVersioningOptions } from '@nestjs/common/interfaces';
-import { start } from 'repl';
 import {
   ChannelEnum,
   Company,
@@ -13,11 +11,11 @@ abstract class EventProcessor {
 }
 
 export class PayReadyEventProcessor extends EventProcessor {
-  run_event(company: Company, user: User) {
+  run_event(company: Company, user: User): string {
     const strategy: INotificationStrategy = new EmailNotificationStrategy();
     strategy.content = this.generate_content(company, user);
     const sender = new SenderService(strategy);
-    sender.send_notification(company, user);
+    return sender.send_notification(company, user);
   }
 
   private generate_content(company: Company, user: User): EmailContent {
@@ -33,8 +31,15 @@ export class PayReadyEventProcessor extends EventProcessor {
  * Process the End of the year event by send a UI notification to the user about his balance leave
  */
 export class EndOfYearEventProcessor extends EventProcessor {
-  run_event(company: Company, user: User) {
-    const strategy: INotificationStrategy = new UINotificationStrategy(null);
+  constructor(
+    private readonly notificationDataService: NotificationDataService,
+  ) {
+    super();
+  }
+  run_event(company: Company, user: User): string {
+    const strategy: INotificationStrategy = new UINotificationStrategy(
+      this.notificationDataService,
+    );
     strategy.content = this.generate_ui_content();
 
     const sender = new SenderService(strategy);
@@ -49,20 +54,26 @@ export class EndOfYearEventProcessor extends EventProcessor {
 }
 
 export class BirthdayEventProcessor extends EventProcessor {
-  run_event(company: Company, user: User) {
-    this.send_email(company, user);
-    this.send_ui_notification(user);
+  constructor(
+    private readonly notificationDataService: NotificationDataService,
+  ) {
+    super();
+  }
+  run_event(company: Company, user: User): string {
+    let result: string;
+    result = this.send_email(company, user);
+    result += '\n' + this.send_ui_notification(company, user);
+    return result;
   }
 
   private send_email(company: Company, user: User) {
     const strategy = new EmailNotificationStrategy();
     strategy.content = this.generate_email_content(company, user);
     const sender = new SenderService(strategy);
-    sender.send_notification(company, user);
+    return sender.send_notification(company, user);
   }
 
   private generate_email_content(company: Company, user: User): EmailContent {
-    //FIXME : content shouldn't mandatory
     return {
       address: user.email,
       object: 'Happy birthday !',
@@ -70,12 +81,15 @@ export class BirthdayEventProcessor extends EventProcessor {
     } as EmailContent;
   }
 
-  private send_ui_notification(user: User) {
-    const strategy: INotificationStrategy = new UINotificationStrategy(null);
+  private send_ui_notification(company: Company, user: User): string {
+    const strategy: INotificationStrategy = new UINotificationStrategy(
+      this.notificationDataService,
+    );
     strategy.content = {
       content: `Happy birthday ${user.firstName} !`,
     } as Content;
     const sender = new SenderService(strategy);
+    return sender.send_notification(company, user);
   }
 }
 
@@ -123,7 +137,7 @@ export class EmailNotificationStrategy implements INotificationStrategy {
 
   send(company: Company, user: User) {
     console.log(
-      `sending a new email from ${company.companyName} to ${user.userId}`,
+      `Sending a new email from ${company.companyName} to ${user.email}`,
     );
   }
 }
@@ -134,8 +148,8 @@ export class SenderService {
     this.strategy = strategy;
   }
 
-  send_notification(company: Company, user: User) {
-    console.log(`Sending notification to ${user}`);
+  send_notification(company: Company, user: User): string {
     this.strategy.send(company, user);
+    return `Notification to ${user.userId} (${user.firstName} ${user.lastName}) sent`;
   }
 }
