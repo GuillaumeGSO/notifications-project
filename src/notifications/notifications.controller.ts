@@ -5,7 +5,7 @@ import { NotificationData } from './services/notifications-data.model';
 
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(private readonly notificationService: NotificationService) { }
 
   @Get(':id')
   async get_user_ui_notifications(

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CompanyDataService } from 'src/company-data/company-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import {
@@ -14,7 +14,7 @@ export class NotificationService {
   constructor(
     private readonly companyDataService: CompanyDataService,
     private readonly notificationDataService: NotificationDataService,
-  ) {}
+  ) { }
 
   async get_notifications_for_user(
     userId: string,
@@ -27,12 +27,18 @@ export class NotificationService {
   }
 
   send_notification(notif: CreateNotificationDto): string {
-    //get content from database
-    const company = this.companyDataService.get_company_by_id(notif.companyId);
-    const user = this.companyDataService.get_user_by_id(notif.userId);
+
+    /**The dto content validation is build-in with 
+    /*the app's PipeValidation and decorators used in the dto class
+    **/
+    
+    // get content from database
+    const company = this.companyDataService.getCompanyById(notif.companyId);
+    const user = this.companyDataService.getUserById(notif.userId);
     const type = notif.notificationType;
-    let result: string;
-    //Pick the right processor
+    var result: string;
+
+    // Pick the right processor
     switch (type) {
       case 'leave-balance-reminder': {
         const myLeaveEvent = new EndOfYearEventProcessor(
@@ -54,9 +60,17 @@ export class NotificationService {
         break;
       }
       default: {
-        result = 'Notification type not known';
+        this.throwBadRequestWithCause(`Notification type (${notif.notificationType}) not supported.`);
       }
     }
     return result;
   }
+
+  throwBadRequestWithCause(cause: string) {
+    throw new HttpException({
+      status: HttpStatus.BAD_REQUEST,
+      error: cause
+    }, HttpStatus.BAD_REQUEST)
+  }
+
 }
