@@ -7,15 +7,23 @@ import {
 import { NotificationDataService } from './notifications-data.service';
 
 abstract class EventProcessor {
-  abstract run_event(company: Company, user: User): void;
+  abstract run_event(company: Company, type: string): string[];
 }
 
 export class PayReadyEventProcessor extends EventProcessor {
-  run_event(company: Company, user: User): string {
-    const strategy: INotificationStrategy = new EmailNotificationStrategy();
-    strategy.content = this.generate_content(company, user);
+  run_event(company: Company, type: string): string[] {
+    const results: string[] = [];
+    const strategy = new EmailNotificationStrategy();
     const sender = new SenderService(strategy);
-    return sender.send_notification(company, user);
+
+    company?.users.forEach((user) => {
+      if (user.subscribedChannels.includes(ChannelEnum.UI)) {
+        strategy.content = this.generate_content(company, user);
+        console.log(strategy.content);
+        results.push(sender.send_notification(company, user, type));
+      }
+    });
+    return results;
   }
 
   private generate_content(company: Company, user: User): EmailContent {
@@ -28,7 +36,8 @@ export class PayReadyEventProcessor extends EventProcessor {
 }
 
 /**
- * Process the End of the year event by send a UI notification to the user about his balance leave
+ * Process the End of the year event by send a UI notification
+ * to the user about his balance leave
  */
 export class EndOfYearEventProcessor extends EventProcessor {
   constructor(
@@ -36,14 +45,20 @@ export class EndOfYearEventProcessor extends EventProcessor {
   ) {
     super();
   }
-  run_event(company: Company, user: User): string {
+  run_event(company: Company, type: string): string[] {
+    const results: string[] = [];
     const strategy: INotificationStrategy = new UINotificationStrategy(
       this.notificationDataService,
     );
-    strategy.content = this.generate_ui_content();
-
     const sender = new SenderService(strategy);
-    return sender.send_notification(company, user);
+    //Only for subscribed users for now
+    company?.users.forEach((user) => {
+      if (user.subscribedChannels.includes(ChannelEnum.UI)) {
+        strategy.content = this.generate_ui_content();
+        results.push(sender.send_notification(company, user, type));
+      }
+    });
+    return results;
   }
 
   private generate_ui_content(): Content {
@@ -59,18 +74,38 @@ export class BirthdayEventProcessor extends EventProcessor {
   ) {
     super();
   }
-  run_event(company: Company, user: User): string {
-    let result: string;
-    result = this.send_email(company, user);
-    result += '\n' + this.send_ui_notification(company, user);
-    return result;
+
+  run_event(company: Company, type: string): string[] {
+    const results: string[] = [];
+    const emailStrategy = new EmailNotificationStrategy();
+    const uiStrategy = new UINotificationStrategy(this.notificationDataService);
+
+    company?.users.forEach((user) => {
+      if (user.subscribedChannels.includes(ChannelEnum.EMAIL)) {
+        const sender = new SenderService(emailStrategy);
+        results.push(
+          this.send_email(company, user, emailStrategy, type, sender),
+        );
+      }
+      if (user.subscribedChannels.includes(ChannelEnum.UI)) {
+        const sender = new SenderService(uiStrategy);
+        results.push(
+          this.send_ui_notification(company, user, uiStrategy, type, sender),
+        );
+      }
+    });
+    return results;
   }
 
-  private send_email(company: Company, user: User) {
-    const strategy = new EmailNotificationStrategy();
+  private send_email(
+    company: Company,
+    user: User,
+    strategy: EmailNotificationStrategy,
+    type: string,
+    sender: SenderService,
+  ) {
     strategy.content = this.generate_email_content(company, user);
-    const sender = new SenderService(strategy);
-    return sender.send_notification(company, user);
+    return sender.send_notification(company, user, type);
   }
 
   private generate_email_content(company: Company, user: User): EmailContent {
@@ -81,21 +116,23 @@ export class BirthdayEventProcessor extends EventProcessor {
     } as EmailContent;
   }
 
-  private send_ui_notification(company: Company, user: User): string {
-    const strategy: INotificationStrategy = new UINotificationStrategy(
-      this.notificationDataService,
-    );
+  private send_ui_notification(
+    company: Company,
+    user: User,
+    strategy: UINotificationStrategy,
+    type: string,
+    sender: SenderService,
+  ): string {
     strategy.content = {
       content: `Happy birthday ${user.firstName} !`,
     } as Content;
-    const sender = new SenderService(strategy);
-    return sender.send_notification(company, user);
+    return sender.send_notification(company, user, type);
   }
 }
 
 export interface INotificationStrategy {
   content: Content;
-  send(company: Company, user: User): void;
+  send(company: Company, user: User, type: string): string;
 }
 
 export class UINotificationStrategy implements INotificationStrategy {
@@ -105,20 +142,13 @@ export class UINotificationStrategy implements INotificationStrategy {
 
   content: Content;
 
-  send(company: Company, user: User) {
-    //Do your stuff
-    //Is this the place to check if registred ?
-    //Nope : do it database side
-    if (ChannelEnum.UI in user.subscribedChannels) {
-      console.log(
-        `sending a new notification from ${company.companyName} to ${user.userId}`,
-      );
-      this.notificationDataService.create_ui_notification(
-        user.userId,
-        'eventype',
-        'content',
-      );
-    }
+  send(company: Company, user: User, type: string) {
+    this.notificationDataService.create_ui_notification(
+      user.userId,
+      type,
+      this.content.content,
+    );
+    return 'UI notification sent ...TODO';
   }
 }
 
@@ -135,10 +165,12 @@ interface EmailContent extends Content {
 export class EmailNotificationStrategy implements INotificationStrategy {
   content: EmailContent;
 
-  send(company: Company, user: User) {
+  send(company: Company, user: User, type: string) {
+    //This is where we should call a real email service
     console.log(
       `Sending a new email from ${company.companyName} to ${user.email}`,
     );
+    return type + ' mail sent to user ' + user.email;
   }
 }
 
@@ -148,8 +180,7 @@ export class SenderService {
     this.strategy = strategy;
   }
 
-  send_notification(company: Company, user: User): string {
-    this.strategy.send(company, user);
-    return `Notification to ${user.userId} (${user.firstName} ${user.lastName}) sent`;
+  send_notification(company: Company, user: User, type: string): string {
+    return this.strategy.send(company, user, type);
   }
 }
