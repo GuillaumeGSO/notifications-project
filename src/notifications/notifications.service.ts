@@ -34,6 +34,7 @@ export class NotificationService {
     // get content from database
     const company = this.companyDataService.getCompanyById(notif.companyId);
     const type = notif.notificationType;
+    const userId = notif.userId;
     let results: string[] = [];
 
     // Pick the right processor
@@ -42,19 +43,19 @@ export class NotificationService {
         const myLeaveEvent = new EndOfYearEventProcessor(
           this.notificationDataService,
         );
-        results = results.concat(myLeaveEvent.run_event(company, type));
+        results = results.concat(myLeaveEvent.run_event(company, userId, type));
         break;
       }
       case 'monthly-payslip': {
         const myPayEvent = new PayReadyEventProcessor();
-        results = results.concat(myPayEvent.run_event(company, type));
+        results = results.concat(myPayEvent.run_event(company, userId, type));
         break;
       }
       case 'happy-birthday': {
         const myBirthdayEvent = new BirthdayEventProcessor(
           this.notificationDataService,
         );
-        results = results.concat(myBirthdayEvent.run_event(company, type));
+        results = results.concat(myBirthdayEvent.run_event(company, userId, type));
         break;
       }
       default: {
