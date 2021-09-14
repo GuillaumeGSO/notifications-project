@@ -2,8 +2,8 @@ import {
   Company,
   ChannelEnum,
   User,
-} from 'src/company-data/company-data.interface';
-import { NotificationDataService } from 'src/notification-data/notification-data.service';
+} from '../../company-data/company-data.interface';
+import { NotificationDataService } from '../../notification-data/notification-data.service';
 import { SenderService } from '../sender/sender.service';
 import {
   EmailNotificationStrategy,

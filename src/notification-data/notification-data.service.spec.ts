@@ -1,12 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getModelForClass } from '@typegoose/typegoose';
+import { NotificationData } from './notification-data.model';
 import { NotificationDataService } from './notification-data.service';
 
 describe('NotificationDataService', () => {
   let service: NotificationDataService;
 
+  const mockedNotificationData = {}
+
   beforeEach(async () => {
+    const mock = {};
+    
     const module: TestingModule = await Test.createTestingModule({
-      providers: [NotificationDataService],
+      providers: [NotificationDataService,
+        {
+        provide: NotificationData,
+        useValue: {}
+      },]
+
     }).compile();
 
     service = module.get<NotificationDataService>(NotificationDataService);
@@ -16,3 +27,4 @@ describe('NotificationDataService', () => {
     expect(service).toBeDefined();
   });
 });
+

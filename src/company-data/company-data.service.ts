@@ -5,7 +5,7 @@ import { User, Company, ChannelEnum } from './company-data.interface';
  */
 @Injectable()
 export class CompanyDataService {
-  users4Monster: User[] = [
+  private users4Monster: User[] = [
     //For MonsterINC company
     this.generateUser('0', 'Bob', 'WARWOSKY', 'bob@monster.inc', [
       ChannelEnum.EMAIL,
@@ -19,7 +19,7 @@ export class CompanyDataService {
     ]),
     this.generateUser('3', 'John', 'WARWOSKY', 'john@monster.inc', []),
   ];
-  users4Dalton: User[] = [
+  private users4Dalton: User[] = [
     //For DALTON sarl company
     this.generateUser('10', 'Joe', 'DALTON', 'joe@dalton.com', [
       ChannelEnum.EMAIL,
@@ -33,7 +33,7 @@ export class CompanyDataService {
     ]),
     this.generateUser('13', 'Avrel', 'DALTON', 'avrel@dalton.com', []),
   ];
-  users4Simpsons: User[] = [
+  private users4Simpsons: User[] = [
     //For The Simpson's company
     this.generateUser('20', 'Bart', 'SIMPSON', 'bart@simpsons.com', [
       ChannelEnum.EMAIL,
@@ -48,7 +48,7 @@ export class CompanyDataService {
     this.generateUser('23', 'Lisa', 'SIMPSON', 'lisa@simpsons.com', []),
   ];
 
-  companies: Company[] = [
+  private companies: Company[] = [
     this.generateCompany(
       '100',
       'EMPTY',
@@ -74,7 +74,7 @@ export class CompanyDataService {
     return this.companies.find((cp) => cp.companyId === companyId);
   }
 
-  generateCompany(
+  private generateCompany(
     companyId: string,
     companyName: string,
     users: User[],
@@ -88,7 +88,7 @@ export class CompanyDataService {
     } as Company;
   }
 
-  generateUser(
+  private generateUser(
     userId: string,
     firstName: string,
     lastName: string,

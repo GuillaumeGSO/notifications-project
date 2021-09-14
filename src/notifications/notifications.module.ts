@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { CompanyDataModule } from 'src/company-data/company-data.module';
-import { CompanyDataService } from 'src/company-data/company-data.service';
-import { NotificationDataModule } from 'src/notification-data/notification-data.module';
+import { CompanyDataModule } from '../company-data/company-data.module';
+import { CompanyDataService } from '../company-data/company-data.service';
+import { NotificationDataModule } from '../notification-data/notification-data.module';
 import { NotificationsController } from './notifications.controller';
 import { NotificationService } from './notifications.service';
 

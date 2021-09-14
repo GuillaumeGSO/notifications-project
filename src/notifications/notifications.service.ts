@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { CompanyDataService } from 'src/company-data/company-data.service';
-import { NotificationData } from 'src/notification-data/notification-data.model';
-import { NotificationDataService } from 'src/notification-data/notification-data.service';
+import { CompanyDataService } from '../company-data/company-data.service';
+import { NotificationData } from '../notification-data/notification-data.model';
+import { NotificationDataService } from '../notification-data/notification-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import {
   EndOfYearEventProcessor,

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { NotificationData } from 'src/notification-data/notification-data.model';
+import { NotificationData } from '../notification-data/notification-data.model';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { NotificationService } from './notifications.service';
 

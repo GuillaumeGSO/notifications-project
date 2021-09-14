@@ -1,5 +1,5 @@
-import { Company, User } from 'src/company-data/company-data.interface';
-import { NotificationDataService } from 'src/notification-data/notification-data.service';
+import { Company, User } from '../../company-data/company-data.interface';
+import { NotificationDataService } from '../../notification-data/notification-data.service';
 
 /**
  * Stratgies about notifications
