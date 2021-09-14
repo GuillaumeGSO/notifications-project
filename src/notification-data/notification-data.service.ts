@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { NotificationData } from './notifications-data.model';
+import { NotificationData } from './notification-data.model';
 
 @Injectable()
 export class NotificationDataService {
   constructor(
     @InjectModel(NotificationData)
-    private readonly notificationDataModel: ReturnModelType<
-      typeof NotificationData
-    >,
+    private readonly notificationDataModel: ReturnModelType<typeof NotificationData>,
   ) {}
 
   async get_notifications_for_user(

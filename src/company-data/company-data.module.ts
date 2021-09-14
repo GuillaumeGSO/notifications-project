@@ -9,5 +9,6 @@ import { CompanyDataService } from 'src/company-data/company-data.service';
   imports: [],
   controllers: [],
   providers: [CompanyDataService],
+  exports: [CompanyDataService],
 })
 export class CompanyDataModule {}

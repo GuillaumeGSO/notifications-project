@@ -11,6 +11,7 @@ import config from './config/keys';
     TypegooseModule.forRoot(config.mongoURI),
     CompanyDataModule,
     NotificationsModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],

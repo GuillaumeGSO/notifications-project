@@ -4,7 +4,7 @@ import {
   Company,
   User,
 } from 'src/company-data/company-data.interface';
-import { NotificationDataService } from './notifications-data.service';
+import { NotificationDataService } from 'src/notification-data/notification-data.service';
 
 abstract class EventProcessor {
   abstract run_event(company: Company, userId: string, type: string): string[];

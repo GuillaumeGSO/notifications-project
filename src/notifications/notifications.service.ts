@@ -1,13 +1,13 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CompanyDataService } from 'src/company-data/company-data.service';
+import { NotificationData } from 'src/notification-data/notification-data.model';
+import { NotificationDataService } from 'src/notification-data/notification-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import {
   PayReadyEventProcessor,
   EndOfYearEventProcessor,
   BirthdayEventProcessor,
 } from './services/sender.service';
-import { NotificationDataService } from 'src/notifications/services/notifications-data.service';
-import { NotificationData } from './services/notifications-data.model';
 
 @Injectable()
 export class NotificationService {
