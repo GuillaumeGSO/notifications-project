@@ -1,12 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Company,
-  User,
-} from 'src/company-data/company-data.interface';
+import { Company, User } from 'src/company-data/company-data.interface';
 import { INotificationStrategy } from './sender.strategies';
-
-
-
 
 @Injectable()
 export class SenderService {

@@ -1,9 +1,9 @@
 interface Content {
-    content: string;
+  content: string;
 }
 
 interface EmailContent extends Content {
-    address: string;
-    object: string;
-    body: string;
+  address: string;
+  object: string;
+  body: string;
 }

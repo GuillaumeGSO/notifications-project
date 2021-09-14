@@ -7,7 +7,9 @@ import { NotificationData } from './notification-data.model';
 export class NotificationDataService {
   constructor(
     @InjectModel(NotificationData)
-    private readonly notificationDataModel: ReturnModelType<typeof NotificationData>,
+    private readonly notificationDataModel: ReturnModelType<
+      typeof NotificationData
+    >,
   ) {}
 
   async get_notifications_for_user(

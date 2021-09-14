@@ -3,8 +3,11 @@ import { CompanyDataService } from 'src/company-data/company-data.service';
 import { NotificationData } from 'src/notification-data/notification-data.model';
 import { NotificationDataService } from 'src/notification-data/notification-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { EndOfYearEventProcessor, PayReadyEventProcessor, BirthdayEventProcessor } from './event-processor/event-processor.service';
-
+import {
+  EndOfYearEventProcessor,
+  PayReadyEventProcessor,
+  BirthdayEventProcessor,
+} from './event-processor/event-processor.service';
 
 @Injectable()
 export class NotificationService {
@@ -52,7 +55,9 @@ export class NotificationService {
         const myBirthdayEvent = new BirthdayEventProcessor(
           this.notificationDataService,
         );
-        results = results.concat(myBirthdayEvent.run_event(company, userId, type));
+        results = results.concat(
+          myBirthdayEvent.run_event(company, userId, type),
+        );
         break;
       }
       default: {
