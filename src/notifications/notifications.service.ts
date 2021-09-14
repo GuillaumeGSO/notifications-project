@@ -3,11 +3,8 @@ import { CompanyDataService } from 'src/company-data/company-data.service';
 import { NotificationData } from 'src/notification-data/notification-data.model';
 import { NotificationDataService } from 'src/notification-data/notification-data.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import {
-  PayReadyEventProcessor,
-  EndOfYearEventProcessor,
-  BirthdayEventProcessor,
-} from './services/sender.service';
+import { EndOfYearEventProcessor, PayReadyEventProcessor, BirthdayEventProcessor } from './event-processor/event-processor.service';
+
 
 @Injectable()
 export class NotificationService {
