@@ -48,6 +48,21 @@ export class CompanyDataService {
     this.generateUser('33', 'Lisa', 'SIMPSON', 'lisa@simpsons.com', []),
   ];
 
+  private users4Heroes: User[] = [
+    //For The Simpson's company
+    this.generateUser('40', 'Captain', 'AMERICA', 'captain@heroes.com', [
+      ChannelEnum.EMAIL,
+      ChannelEnum.UI,
+    ]),
+    this.generateUser('41', 'Peter', 'SPIDERMAN', 'peter@heroes.com', [
+      ChannelEnum.EMAIL,
+    ]),
+    this.generateUser('42', 'Clark', 'SUPERMAN', 'clark@heroes.com', [
+      ChannelEnum.UI,
+    ]),
+    this.generateUser('43', 'Cat', 'WOMAN', 'cat@heroes.com', []),
+  ];
+
   private companies: Company[] = [
     this.generateCompany(
       '000',
@@ -68,6 +83,8 @@ export class CompanyDataService {
     this.generateCompany('300', "THE SIMPSON'S", this.users4Simpsons, [
       ChannelEnum.UI,
     ]),
+
+    this.generateCompany('400', "MARVEL", this.users4Heroes, []),
   ];
 
   getCompanyById(companyId: string): Company {
