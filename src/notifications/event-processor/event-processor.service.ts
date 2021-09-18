@@ -23,8 +23,10 @@ export class PayReadyEventProcessor extends EventProcessor {
 
     company?.users.forEach((user) => {
       if (
-        user.userId === userId &&
-        user.subscribedChannels.includes(ChannelEnum.UI)
+        user.userId === userId && (
+          company.subscribedChannels.includes(ChannelEnum.UI) ||
+          user.subscribedChannels.includes(ChannelEnum.UI)
+        )
       ) {
         strategy.content = this.generate_content(company, user);
         results.push(sender.send_notification(company, user, type));
@@ -62,8 +64,10 @@ export class EndOfYearEventProcessor extends EventProcessor {
 
     company?.users.forEach((user) => {
       if (
-        user.userId === userId &&
-        user.subscribedChannels.includes(ChannelEnum.UI)
+        user.userId === userId && (
+          company.subscribedChannels.includes(ChannelEnum.UI) ||
+          user.subscribedChannels.includes(ChannelEnum.UI)
+        )
       ) {
         strategy.content = this.generate_ui_content();
         results.push(sender.send_notification(company, user, type));
@@ -98,8 +102,10 @@ export class BirthdayEventProcessor extends EventProcessor {
     company?.users.forEach((user) => {
       //Emails
       if (
-        user.userId === userId &&
-        user.subscribedChannels.includes(ChannelEnum.EMAIL)
+        user.userId === userId && (
+          company.subscribedChannels.includes(ChannelEnum.EMAIL) ||
+          user.subscribedChannels.includes(ChannelEnum.EMAIL)
+        )
       ) {
         results.push(
           this.send_email(company, user, emailStrategy, type, emailSender),
@@ -107,8 +113,10 @@ export class BirthdayEventProcessor extends EventProcessor {
       }
       //UI Notifications
       if (
-        user.userId === userId &&
-        user.subscribedChannels.includes(ChannelEnum.UI)
+        user.userId === userId && (
+          company.subscribedChannels.includes(ChannelEnum.UI) ||
+          user.subscribedChannels.includes(ChannelEnum.UI)
+        )
       ) {
         results.push(
           this.send_ui_notification(company, user, uiStrategy, type, uiSender),
