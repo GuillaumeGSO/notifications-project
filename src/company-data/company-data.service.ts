@@ -7,65 +7,65 @@ import { User, Company, ChannelEnum } from './company-data.interface';
 export class CompanyDataService {
   private users4Monster: User[] = [
     //For MonsterINC company
-    this.generateUser('0', 'Bob', 'WARWOSKY', 'bob@monster.inc', [
+    this.generateUser('10', 'Bob', 'WARWOSKY', 'bob@monster.inc', [
       ChannelEnum.EMAIL,
       ChannelEnum.UI,
     ]),
-    this.generateUser('1', 'Fred', 'WARWOSKY', 'fred@monster.inc', [
+    this.generateUser('11', 'Fred', 'WARWOSKY', 'fred@monster.inc', [
       ChannelEnum.EMAIL,
     ]),
-    this.generateUser('2', 'Tom', 'WARWOSKY', 'tom@monster.inc', [
+    this.generateUser('12', 'Tom', 'WARWOSKY', 'tom@monster.inc', [
       ChannelEnum.UI,
     ]),
-    this.generateUser('3', 'John', 'WARWOSKY', 'john@monster.inc', []),
+    this.generateUser('13', 'John', 'WARWOSKY', 'john@monster.inc', []),
   ];
   private users4Dalton: User[] = [
     //For DALTON sarl company
-    this.generateUser('10', 'Joe', 'DALTON', 'joe@dalton.com', [
+    this.generateUser('20', 'Joe', 'DALTON', 'joe@dalton.com', [
       ChannelEnum.EMAIL,
       ChannelEnum.UI,
     ]),
-    this.generateUser('11', 'Jack', 'DALTON', 'jack@dalton.com', [
+    this.generateUser('21', 'Jack', 'DALTON', 'jack@dalton.com', [
       ChannelEnum.EMAIL,
     ]),
-    this.generateUser('12', 'William', 'DALTON', 'william@dalton.com', [
+    this.generateUser('22', 'William', 'DALTON', 'william@dalton.com', [
       ChannelEnum.UI,
     ]),
-    this.generateUser('13', 'Avrel', 'DALTON', 'avrel@dalton.com', []),
+    this.generateUser('23', 'Avrel', 'DALTON', 'avrel@dalton.com', []),
   ];
   private users4Simpsons: User[] = [
     //For The Simpson's company
-    this.generateUser('20', 'Bart', 'SIMPSON', 'bart@simpsons.com', [
+    this.generateUser('30', 'Bart', 'SIMPSON', 'bart@simpsons.com', [
       ChannelEnum.EMAIL,
       ChannelEnum.UI,
     ]),
-    this.generateUser('21', 'Homer', 'SIMPSON', 'homer@simpsons.com', [
+    this.generateUser('31', 'Homer', 'SIMPSON', 'homer@simpsons.com', [
       ChannelEnum.EMAIL,
     ]),
-    this.generateUser('22', 'Marge', 'SIMPSON', 'Marge@simpsons.com', [
+    this.generateUser('32', 'Marge', 'SIMPSON', 'Marge@simpsons.com', [
       ChannelEnum.UI,
     ]),
-    this.generateUser('23', 'Lisa', 'SIMPSON', 'lisa@simpsons.com', []),
+    this.generateUser('33', 'Lisa', 'SIMPSON', 'lisa@simpsons.com', []),
   ];
 
   private companies: Company[] = [
     this.generateCompany(
-      '100',
+      '000',
       'EMPTY',
       [],
       [ChannelEnum.EMAIL, ChannelEnum.UI],
     ),
 
-    this.generateCompany('200', 'MONSTER Inc', this.users4Monster, [
+    this.generateCompany('100', 'MONSTER Inc', this.users4Monster, [
       ChannelEnum.EMAIL,
       ChannelEnum.UI,
     ]),
 
-    this.generateCompany('300', 'DALTON Sarl', this.users4Monster, [
+    this.generateCompany('200', 'DALTON Sarl', this.users4Dalton, [
       ChannelEnum.EMAIL,
     ]),
 
-    this.generateCompany('400', "THE SIMPSON'S", this.users4Simpsons, [
+    this.generateCompany('300', "THE SIMPSON'S", this.users4Simpsons, [
       ChannelEnum.UI,
     ]),
   ];
