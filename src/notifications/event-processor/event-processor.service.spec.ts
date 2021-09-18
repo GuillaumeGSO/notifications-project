@@ -38,7 +38,7 @@ describe('EndOfYearEventProcessor', () => {
 
   let company = {companyId :"1", companyName:"First", users: [], subscribedChannels:[]} as Company;
   
-  it('should be defined', () => {
+  it('should call the service', () => {
     expect(service.run_event(company, null, "unknown")).toBeDefined();
   });
 
