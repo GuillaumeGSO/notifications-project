@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CompanyDataService } from 'src/company-data/company-data.service';
+import { CompanyDataService } from './../company-data/company-data.service';
 
 /**
  * This module would use a real EntrepriseDB connection instead of this mocked
