@@ -22,7 +22,7 @@ export class UINotificationStrategy implements INotificationStrategy {
       type,
       this.content.content,
     );
-    return `New UI Notifiction ${type} added for ${user.firstName} ${user.lastName} of ${company.companyName}`;
+    return `New UI Notification ${type} added for ${user.firstName} ${user.lastName} of ${company.companyName}`;
   }
 }
 
