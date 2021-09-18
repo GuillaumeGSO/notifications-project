@@ -9,7 +9,7 @@ export class NotificationsController {
 
   @Get(':id')
   async get_user_ui_notifications(
-    @Param('id') id,
+    @Param('id') id: string,
   ): Promise<NotificationData[]> {
     return await this.notificationService.get_notifications_for_user(id);
   }

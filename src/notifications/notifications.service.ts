@@ -61,6 +61,7 @@ export class NotificationService {
         break;
       }
       default: {
+        //Should never happened : Pipe is protecting this case in CreateNotificationDto
         this.throwBadRequestWithCause(
           `Notification type (${notif.notificationType}) not supported.`,
         );
@@ -72,8 +73,9 @@ export class NotificationService {
   throwBadRequestWithCause(cause: string) {
     throw new HttpException(
       {
-        status: HttpStatus.BAD_REQUEST,
-        error: cause,
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: [cause],
+        error: "Bad request"
       },
       HttpStatus.BAD_REQUEST,
     );
