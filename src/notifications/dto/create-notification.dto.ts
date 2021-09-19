@@ -1,9 +1,12 @@
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 
-const notificationTypes = ['leave-balance-reminder', 'monthly-payslip', 'happy-birthday'];
+const notificationTypes = [
+  'leave-balance-reminder',
+  'monthly-payslip',
+  'happy-birthday',
+];
 
 export class CreateNotificationDto {
-
   @IsNotEmpty()
   @IsString()
   readonly companyId: string;

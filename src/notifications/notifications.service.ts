@@ -75,7 +75,7 @@ export class NotificationService {
       {
         statusCode: HttpStatus.BAD_REQUEST,
         message: [cause],
-        error: "Bad request"
+        error: 'Bad request',
       },
       HttpStatus.BAD_REQUEST,
     );

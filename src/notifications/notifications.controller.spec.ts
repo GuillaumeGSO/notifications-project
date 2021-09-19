@@ -5,16 +5,17 @@ import { NotificationService } from './notifications.service';
 describe('NotificationsController', () => {
   let controller: NotificationsController;
 
-  const mocked = { 
-  get_user_ui_notifications: jest.fn().mockReturnValue([]),
-  send_notification: jest.fn().mockReturnValue([]) 
-  }
+  const mocked = {
+    get_user_ui_notifications: jest.fn().mockReturnValue([]),
+    send_notification: jest.fn().mockReturnValue([]),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [NotificationsController],
       providers: [NotificationService],
-    }).overrideProvider(NotificationService)
+    })
+      .overrideProvider(NotificationService)
       .useValue(mocked)
       .compile();
 

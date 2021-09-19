@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SenderService } from './sender.service';
-import { EmailNotificationStrategy, UINotificationStrategy } from './sender.strategies';
+import {
+  EmailNotificationStrategy,
+  UINotificationStrategy,
+} from './sender.strategies';
 
 describe('UINotificationStrategy', () => {
   let service: UINotificationStrategy;

@@ -1,8 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Company } from '../../company-data/company-data.interface';
-import { EndOfYearEventProcessor, PayReadyEventProcessor, BirthdayEventProcessor } from './event-processor.service';
-
-
+import {
+  EndOfYearEventProcessor,
+  PayReadyEventProcessor,
+  BirthdayEventProcessor,
+} from './event-processor.service';
 
 describe('PayReadyEventProcessor', () => {
   let service: PayReadyEventProcessor;
@@ -20,7 +22,6 @@ describe('PayReadyEventProcessor', () => {
   });
 });
 
-
 describe('EndOfYearEventProcessor', () => {
   let service: EndOfYearEventProcessor;
 
@@ -36,14 +37,17 @@ describe('EndOfYearEventProcessor', () => {
     expect(service).toBeDefined();
   });
 
-  let company = {companyId :"1", companyName:"First", users: [], subscribedChannels:[]} as Company;
-  
+  const company = {
+    companyId: '1',
+    companyName: 'First',
+    users: [],
+    subscribedChannels: [],
+  } as Company;
+
   it('should call the service', () => {
-    expect(service.run_event(company, null, "unknown")).toBeDefined();
+    expect(service.run_event(company, null, 'unknown')).toBeDefined();
   });
-
 });
-
 
 describe('BirthdayEventProcessor', () => {
   let service: BirthdayEventProcessor;
@@ -59,6 +63,4 @@ describe('BirthdayEventProcessor', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
-
 });
