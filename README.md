@@ -33,12 +33,12 @@ $ npm run test:cov
 ```
 
 ## Documentation
-[wiki](https://hub.docker.com/_/mongo)
+[wiki](https://github.com/GuillaumeGSO/notifications-project/wiki/Architecture)
 
 ## How to start a local Mango DB hosted in a Docker container (not tested)
 Based on : [MongoDB](https://hub.docker.com/_/mongo)
 
-# Download and install Docker
+Download and install Docker
 
 Download offcial docker image :
 ```bash docker pull mongo``` 
