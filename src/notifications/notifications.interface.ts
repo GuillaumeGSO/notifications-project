@@ -1,8 +1,8 @@
-export interface Content {
+interface Content {
   content: string;
 }
 
-export interface EmailContent extends Content {
+interface EmailContent extends Content {
   address: string;
   object: string;
   body: string;
