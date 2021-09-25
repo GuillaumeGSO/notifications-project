@@ -1,29 +1,28 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { createMock } from '@golevelup/ts-jest';
+import { ReturnModelType } from '@typegoose/typegoose';
+import { resolve } from 'path/posix';
 import { NotificationData } from './notification-data.model';
 import { NotificationDataService } from './notification-data.service';
 
 describe('NotificationDataService', () => {
-  let service: NotificationDataService;
+  //Service to test
+  let notificationDataService: NotificationDataService;
 
-  // const mockedNotificationData = {};
-
-  beforeEach(async () => {
-    // const mock = {};
-
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        NotificationDataService,
-        {
-          provide: NotificationData,
-          useValue: {},
-        },
-      ],
-    }).compile();
-
-    service = module.get<NotificationDataService>(NotificationDataService);
+  it('should be defined',  () => {
+    expect(notificationDataService).toBeDefined();
+  });
+  
+  const mockDataModel = createMock<ReturnModelType<typeof NotificationData>>();
+  notificationDataService = new NotificationDataService(mockDataModel);
+  
+  it ('should work with mocked service', async () => {
+    //FIXME : the find method return a FilterQuery...not actual datas !
+    //Should i mock the content of the model instead and let the query runs ?
+    mockDataModel.find.mockResolvedValue( {userId:"1", type:"type1", content:"content1"});
+    
+    const result = await notificationDataService.get_notifications_for_user("1");
+    expect(result).toMatchObject({userId:"1", type:"type1", content:"content1"})
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
 });
+

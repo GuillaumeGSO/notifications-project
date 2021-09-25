@@ -16,8 +16,7 @@ export class NotificationDataService {
     userId: string,
   ): Promise<NotificationData[]> {
     const notifs = await this.notificationDataModel
-      .find({ userId: userId })
-      .exec();
+      .find({ userId: userId });
     return notifs;
   }
 
