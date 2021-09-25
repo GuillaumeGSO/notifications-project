@@ -16,39 +16,34 @@ const monsterCompany: Company = getCompanyStub().find(
 );
 
 describe('Call sender service with different strategies', () => {
-  // Mock
-  let mockedStrategy: INotificationStrategy;
   //Service to test
   let senderService: SenderService;
 
-  //Fake strategy
-  class DummyStrategy implements INotificationStrategy {
-    content: Content;
-    send(company: Company, user: User, type: string) {
-      return 'This is a dummy strategy';
-    }
-  }
-
   describe('works with UINotificationStrategy', () => {
-    mockedStrategy = createMock<UINotificationStrategy>(undefined, { name: 'UINotificationStrategy' });
-    //mockedStrategy.send(undefined, undefined,undefined).mockReturnValueOnce("sent !")
-    
-    mockedStrategy.send = (company: Company, user: User, type: string) => {return "New UI notification sent !"}
+    const mockedStrategy = createMock<UINotificationStrategy>();
+    mockedStrategy.send.mockReturnValue("Notification Sent !");
     senderService = new SenderService(mockedStrategy);
 
+    it('should verifies that mock is ready', () => {
+      expect(mockedStrategy).toBeDefined();
+      expect(mockedStrategy.content).toBeDefined();
+      expect(mockedStrategy.send).toBeDefined();
+    })
 
     it('should call the strategy send method with no params', () => {
+      mockedStrategy.send.mockReturnValue("Notification Sent !");
       const result = senderService.send_notification(
         undefined,
         undefined,
         undefined,
       );
+      // expect(mockedStrategy.send).toBeCalledTimes(1);
       expect(mockedStrategy.send).toBeCalledWith(
         undefined,
         undefined,
         undefined,
       );
-      expect(result).toContain("sent !");
+      expect(result).toEqual("Notification Sent !");
     });
 
     it('should call the strategy send method with params', () => {
@@ -62,12 +57,13 @@ describe('Call sender service with different strategies', () => {
         monsterCompany.users[0],
         'leave_balance_reminder',
       );
-      expect(result).toEqual("sent !");
+      expect(result).toEqual("Notification Sent !");
     });
   });
 
   describe('works with EmailNotificationStrategy', () => {
-    mockedStrategy = createMock<EmailNotificationStrategy>();
+    const mockedStrategy = createMock<EmailNotificationStrategy>();
+    mockedStrategy.send.mockReturnValue("Email sent !")
     senderService = new SenderService(mockedStrategy);
     it('should call the strategy send method with no params', () => {
       const result = senderService.send_notification(
@@ -80,7 +76,7 @@ describe('Call sender service with different strategies', () => {
         undefined,
         undefined,
       );
-      expect(result).toEqual("sent !");
+      expect(result).toEqual("Email sent !");
     });
 
     it('should call the strategy send method with params', () => {
@@ -94,12 +90,21 @@ describe('Call sender service with different strategies', () => {
         monsterCompany.users[0],
         'leave_balance_reminder',
       );
-      expect(result).toEqual("sent !");
+      expect(result).toEqual("Email sent !");
     });
   });
 
   describe('works with any strategy', () => {
-    mockedStrategy = createMock<DummyStrategy>();
+
+    //Fake strategy
+    class DummyStrategy implements INotificationStrategy {
+      content: Content;
+      send(company: Company, user: User, type: string) {
+        return 'This is a dummy strategy';
+      }
+    }
+    const mockedStrategy = createMock<DummyStrategy>();
+    mockedStrategy.send.mockReturnValue("Dummy sent !");
     senderService = new SenderService(mockedStrategy);
     it('should call the strategy send method with no params', () => {
       const result = senderService.send_notification(
@@ -112,7 +117,7 @@ describe('Call sender service with different strategies', () => {
         undefined,
         undefined,
       );
-      expect(result).toEqual("sent !");
+      expect(result).toEqual("Dummy sent !");
     });
 
     it('should call the strategy send method with params', () => {
@@ -126,6 +131,7 @@ describe('Call sender service with different strategies', () => {
         monsterCompany.users[0],
         'leave_balance_reminder',
       );
+      expect(result).toEqual("Dummy sent !");
     });
   });
 });
