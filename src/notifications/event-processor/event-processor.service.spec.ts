@@ -6,6 +6,8 @@ import {
   BirthdayEventProcessor,
 } from './event-processor.service';
 
+
+//FIXME very poor tests (only toBeDefined)
 describe('PayReadyEventProcessor', () => {
   let service: PayReadyEventProcessor;
 

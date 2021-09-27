@@ -7,6 +7,11 @@ import {
 import { CompanyDataService } from '../company-data/company-data.service';
 import { NotificationDataService } from '../notification-data/notification-data.service';
 import { NotificationService } from './notifications.service';
+import { getCompanyStub } from '../company-data/company-data.stubs';
+
+const simpsonsCompany: Company = getCompanyStub().find(
+  (cp) => cp.companyId === '300',
+);
 
 describe('NotificationsService', () => {
   let service: NotificationService;
@@ -14,7 +19,7 @@ describe('NotificationsService', () => {
   const mockedCompanyDataService = {
     getCompanyById: jest
       .fn()
-      .mockReturnValue(generateCompany('1', 'FirstCompany', [], [])),
+      .mockReturnValue(simpsonsCompany),
   };
   const mockedNotificationDataService = {
     get_notifications_for_user: jest.fn().mockReturnValue([]),
@@ -40,19 +45,10 @@ describe('NotificationsService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+    expect(service.get_notifications_for_user).toBeDefined();
+    expect(service.send_notification).toBeDefined();
+    expect(service.throwBadRequestWithCause).toBeDefined();
   });
 });
 
-function generateCompany(
-  companyId: string,
-  companyName: string,
-  users: User[],
-  channels: ChannelEnum[],
-): Company {
-  return {
-    companyId: companyId,
-    companyName: companyName,
-    users: users,
-    subscribedChannels: channels,
-  } as Company;
-}
+

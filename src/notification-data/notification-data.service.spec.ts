@@ -8,21 +8,25 @@ describe('NotificationDataService', () => {
   //Service to test
   let notificationDataService: NotificationDataService;
 
-  it('should be defined',  () => {
-    expect(notificationDataService).toBeDefined();
-  });
-  
+beforeEach( () => {
   const mockDataModel = createMock<ReturnModelType<typeof NotificationData>>();
   notificationDataService = new NotificationDataService(mockDataModel);
-  
-  it ('should work with mocked service', async () => {
-    //FIXME : the find method return a FilterQuery...not actual datas !
-    //Should i mock the content of the model instead and let the query runs ?
-    mockDataModel.find.mockResolvedValue( {userId:"1", type:"type1", content:"content1"});
-    
-    const result = await notificationDataService.get_notifications_for_user("1");
-    expect(result).toMatchObject({userId:"1", type:"type1", content:"content1"})
+})
+
+  it('should be defined',  () => {
+    expect(notificationDataService).toBeDefined();
+    expect(notificationDataService.create_ui_notification).toBeDefined();
+    expect(notificationDataService.get_notifications_for_user).toBeDefined();
   });
 
+  
+  /** 
+  it('should verify the mock is ready', async () => {
+    await notificationDataService.create_ui_notification("1", "type", "content");
+    await notificationDataService.get_notifications_for_user("1");
+  });
+  */
+
+  
 });
 

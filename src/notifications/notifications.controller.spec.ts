@@ -26,9 +26,4 @@ describe('NotificationsController', () => {
     expect(controller).toBeDefined();
   });
 
-  // it ('should get notification for a user', ()=>{
-  //   expect(controller.get_user_ui_notifications('123'))
-  //   .toEqual([]);
-  //   expect(mocked.get_user_ui_notifications).toHaveBeenCalled();
-  // });
 });
