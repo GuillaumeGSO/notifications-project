@@ -47,3 +47,4 @@ Download offcial docker image :
 Start the container : ```bash $ docker run --name some-mongo -d mongo:tag```
 
 With : some-mongo = name of your instance, tag = version on mongoDB
+.
