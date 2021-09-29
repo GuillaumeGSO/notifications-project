@@ -4,6 +4,11 @@ tasks:
   - init: npm install
     command: npm run start:dev
 
+github:
+  prebuilds:
+    master: true
+    branche: true
+
 # Ports to expose on workspace startup
 ports:
   - port: 8000
