@@ -1,8 +1,8 @@
 
 # Commands to start on workspace startup
 tasks:
-  - init: npm install
-    command: npm run start:dev
+  - before: npm install
+    init: npm run start:dev
 
 github:
   prebuilds:
